@@ -92,7 +92,7 @@ Please enter the password for user 'william.sayer@wanadoo.fr'  ************
 Do you wish to have them all updated?[N] (y/N)  y
 Please enter an update interval:[30]  
 Do you wish to run something at successful update?[N] (y/N)  y
-Please enter the script/program name  
+Please enter the script/program name  `(appuyez uniquement sur la touche ENTER)`
 
 New configuration file '/usr/local/etc/no-ip2.conf' created.
 
