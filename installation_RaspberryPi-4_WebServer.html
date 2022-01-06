@@ -1,0 +1,134 @@
+<h1 id="installation-raspberry-pi-4-webserver">Installation Raspberry Pi 4 WebServer</h1>
+<h2 id="installation-de-la-couche-ssl">Installation de la couche SSL :</h2>
+<ul>
+<li><code>sudo apt-get update</code></li>
+<li><code>sudo apt-get upgrade -y</code></li>
+<li><code>sudo apt install -y ca-certificates curl openssh-server</code></li>
+<li><code>sudo hostnamectl</code></li>
+</ul>
+<h2 id="installation-serveur-web">Installation serveur WEB :</h2>
+<ul>
+<li><code>sudo apt-get install apache2</code></li>
+</ul>
+<h2 id="rapatriement-des-données-de-lancien-serveur-vers-le-nouveau">rapatriement des données de l’ancien serveur vers le nouveau :</h2>
+<ul>
+<li><code>sudo scp -r /Library/WebServer/Documents/agc wsayer@192.168.1.38:/tmp --&gt; de l'ancien serveur vers le nouveau</code></li>
+<li><code>cd /var/www/html</code> –&gt; sur le serveur cible (le nouveau)</li>
+<li><code>sudo mv /tmp/agc .</code></li>
+<li><code>sudo chown -R www-data:www-data agc/</code></li>
+</ul>
+<h2 id="installation-de-php-la-derenière-version-disponible-pour-la-version-dubuntu-installé">Installation de php la derenière version disponible pour la version d’ubuntu installé :</h2>
+<ul>
+<li><code>sudo apt-get install php</code></li>
+</ul>
+<h2 id="installation-de-mysql">Installation de Mysql :</h2>
+<ul>
+<li><code>sudo apt-get install mariadb-server</code></li>
+<li><code>sudo apt-get install php-pdo</code></li>
+<li><code>sudo apt-get install php-pdo-mysql</code></li>
+<li><code>sudo systemctl restart apache2.service</code></li>
+<li><code>sudo mysql_secure_installation</code></li>
+<li><code>sudo mysql -u root -p</code></li>
+<li><code>sudo apt-get install phpmyadmin</code></li>
+</ul>
+<p>Allez dans phpmyadmin via le web est créer les deux bases de données sans créer de tables, nécessaire pour la restauration</p>
+<h2 id="rappatriement-bases-de-données">Rappatriement bases de données :</h2>
+<ul>
+<li><code>sudo gzip -d agc.sql.gz</code></li>
+<li><code>sudo gzip -d media.sql.gz</code></li>
+<li><code>sudo mysql -u root -p agc &lt; agc.sql</code></li>
+<li><code>sudo mysql -u root -p media &lt; media.sql</code></li>
+</ul>
+<h2 id="installation-serveur-postfix">Installation serveur postfix :</h2>
+<ul>
+<li><code>sudo apt install mailutils</code></li>
+</ul>
+<h2 id="installation-de-letsencrypt-pour-permettre-la-création-dun-certificat-serveur">Installation de letsencrypt pour permettre la création d’un certificat serveur :</h2>
+<ul>
+<li><code>sudo apt-get install snapd</code> –&gt; gestionnaire de paquet qui doit déjà être installé sur la version Ubuntu 21.10</li>
+<li><code>sudo snap install core</code></li>
+<li><code>sudo snap refresh core</code></li>
+<li><code>sudo snap install</code> –classic certbot</li>
+<li><code>sudo ln -s /snap/bin/certbot /usr/bin/certbot</code></li>
+<li><code>sudo certbot --apache -d agc88.ddns.net</code></li>
+<li><code>sudo apachectl -M</code></li>
+<li><code>sudo a2enmod ssl</code></li>
+<li><code>sudo a2enmod rewrite</code></li>
+<li><code>sudo a2ensite agc.conf</code></li>
+<li><code>sudo a2ensite agc-le-ssl.conf</code></li>
+<li><code>systemctl restart apache2 ou systemctl reload apache2</code> ` ## Installation de gcc et make pour permettre la compilation d’application comme no-ip :</li>
+<li><code>sudo apt-get install gcc</code></li>
+<li><code>sudo apt-get install make</code></li>
+</ul>
+<h2 id="no-ip">no-ip :</h2>
+<p>Download l’application no-ip duc sur le site de no-ip</p>
+<ul>
+<li><code>sudo mv noip-duc-linux.tar.gz /usr/local/src/</code></li>
+<li><code>sudo cd /usr/local/src/</code></li>
+<li><code>sudo tar xzf noip-duc-linux.tar.gz</code></li>
+<li><code>cd noip-2.1.9-1/</code></li>
+<li><code>sudo make</code></li>
+<li><code>sudo make install</code></li>
+<li><code>Create the configuration file: /usr/local/bin/noip2 -C</code></li>
+</ul>
+<h2 id="sur-le-site-de-no-ip-dans-votre-espace-client-il-faut-lancer-la-configuration-du-host">Sur le site de no-ip, dans votre espace client, il faut lancer la configuration du host :</h2>
+<ul>
+<li>No-IP Hostnames / cliquez sur Last Update après avoir créer un host.</li>
+<li>Une fenêtre s’affiche : <strong>No Dynamic Update Detected for: agc.blogsyte.com</strong>, cliquez sur le bouton <strong>Configure Now</strong></li>
+<li>Select Hostname, cliquez sur le bouton <strong>Next Step</strong></li>
+<li>Connection Details, remplir les champs suivants :
+<ul>
+<li>Router Brand : livebox –&gt; affichera : <strong>Orange Livebox</strong>, qu’il faut sélectionner</li>
+<li>Software/device : Raspberry –&gt; affichera : <strong>Raspberry Pi (Web Server)</strong>, qu’il faut sélectionner</li>
+<li>Appuyez sur le bouton <strong>Next Step</strong></li>
+</ul></li>
+<li>Is there a computer always running on your network? –&gt; Sélectionnez <strong>Yes</strong></li>
+<li>Sur le <strong>Raspberry Pi 4</strong>, veuillez suivre la procédure indiquée pour télécharger l’application <strong>no-ip DUC</strong></li>
+<li>quand l’installation est terminée sur le <strong>Raspberry Pi</strong>, appuyez sur le bouton <strong>Next Step</strong></li>
+<li><strong>Port Forwarding</strong>, tester le port <code>80</code> ou <code>443</code> pour vérifier qu’ils sont bien ouvert sur le <strong>Raspberry Pi</strong>.
+<ul>
+<li>Si il affiche un message vert <strong>port 443 is open</strong>, alors le tour est joué, votre site est dorénavant accessible de l’extérieur via une adresse publique de <strong>no-ip</strong>. Plutôt un nom <strong>DNS</strong> car l’adresse IP publique change toutes les 24 heures car c’est du DNS dynamique, <strong>DyDNS</strong>.</li>
+</ul></li>
+</ul>
+<h2 id="brancher-un-disque-dur-externe-en-usb-3">Brancher un disque dur externe en USB 3 :</h2>
+<h3 id="pré-requis">Pré-requis :</h3>
+<ul>
+<li>Un disque dur formatté en <strong>FAT</strong> ou <strong>NTFS</strong> branché à votre <strong>Raspberry Pi</strong> en <strong>USB</strong>.</li>
+<li>Un accès SSH à votre machine.</li>
+</ul>
+<h3 id="installation">Installation :</h3>
+<ul>
+<li><code>sudo apt-get update</code></li>
+<li><code>sudo apt-get upgrade</code></li>
+<li><code>sudo apt-get install ntfs-3g</code></li>
+</ul>
+<h3 id="configuration">Configuration :</h3>
+<h4 id="identification-du-disque-dur">Identification du disque dur :</h4>
+<ul>
+<li><code>sudo fdisk -l</code></li>
+</ul>
+<figure>
+<img src="fdisk-1.png" alt="commande fdisk" /><figcaption aria-hidden="true">commande fdisk</figcaption>
+</figure>
+<ul>
+<li><code>sudo blkid /dev/sda1</code></li>
+</ul>
+<p><code>/dev/sda1: LABEL="backup" BLOCK_SIZE="512" UUID="06A23944A239398F" TYPE="ntfs" PARTUUID="5afddfb0-01"</code></p>
+<h4 id="création-du-dossier-cible">Création du dossier cible :</h4>
+<ul>
+<li><code>sudo sudo mkdir /media/usb</code></li>
+<li><code>sudo chown -R wsayer:wsayer usb</code> –&gt; droit de l’utilisateur du Raspberry Pi</li>
+<li><code>sudo vi /etc/fstab</code></li>
+</ul>
+<p>Insérez la ligne suivante en indiquant l’<strong>UUID</strong> du disque dur USB que l’on a identifié à l’aide de la commande <strong>blkid /dev/sda1</strong>.<br />
+<code>UUID="06A23944A239398F" /media/usb       ntfs    defaults,auto,rw,nofail 0       1</code></p>
+<ul>
+<li><code>sudo mount -a</code> –&gt; monter le disque dur</li>
+</ul>
+<p>Vérifier que le disque dur est bien monté :</p>
+<ul>
+<li><code>df -h</code></li>
+</ul>
+<figure>
+<img src="df.png" alt="visualisation disque /dev/sda1" /><figcaption aria-hidden="true">visualisation disque /dev/sda1</figcaption>
+</figure>
