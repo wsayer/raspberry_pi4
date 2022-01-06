@@ -80,6 +80,25 @@ Download l'application no-ip duc sur le site de no-ip
 - **Port Forwarding**, tester le port `80` ou `443` pour vérifier qu'ils sont bien ouvert sur le **Raspberry Pi**. 
   * Si il affiche un message vert **port 443 is open**, alors le tour est joué, votre site est dorénavant accessible de l'extérieur via une adresse publique de **no-ip**. Plutôt un nom **DNS** car l'adresse IP publique change toutes les 24 heures car c'est du DNS dynamique, **DyDNS**.
 
+  `Àttention :` Si vous redémarrez votre **Raspberry pi**, vous serez amené à lancer la commande suivante pour que votre site web soit de nouveau accessible.
+  - `sudo noip2 -C`
+```
+Auto configuration for Linux client of no-ip.com.
+
+Please enter the login/email string for no-ip.com  william.sayer@wanadoo.fr
+Please enter the password for user 'william.sayer@wanadoo.fr'  ************
+
+2 hosts are registered to this account.
+Do you wish to have them all updated?[N] (y/N)  y
+Please enter an update interval:[30]  
+Do you wish to run something at successful update?[N] (y/N)  y
+Please enter the script/program name  
+
+New configuration file '/usr/local/etc/no-ip2.conf' created.
+
+```
+
+
 ## Brancher un disque dur externe en USB 3 :
 ### Pré-requis :
 - Un disque dur formatté en **FAT** ou **NTFS** branché à votre **Raspberry Pi** en **USB**.
