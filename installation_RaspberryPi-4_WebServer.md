@@ -8,6 +8,15 @@
 ## Installation serveur WEB :
 - `sudo apt-get install apache2`
 
+### Redirection pour éviter affichage d'arborescence
+
+Créer un fichier `index.php` à mettre à chaque endroit où une arborescence de fichiers peut s'afficher et insérer le code suivant :
+```
+<?php
+header("Location: https://agc88.ddns.net/agc/");
+?>
+```
+
 ## rapatriement des données de l'ancien serveur vers le nouveau :
 - `sudo scp -r /Library/WebServer/Documents/agc wsayer@192.168.1.38:/tmp --> de l'ancien serveur vers le nouveau`
 - `cd /var/www/html` --> sur le serveur cible (le nouveau)
@@ -99,7 +108,7 @@ New configuration file '/usr/local/etc/no-ip2.conf' created.
 ```
 
 
-## Brancher un disque dur externe en USB 3 :
+## Brancher un disque dur externe en USB 3 pour la sauvegarde du site WEB :
 ### Pré-requis :
 - Un disque dur formatté en **FAT** ou **NTFS** branché à votre **Raspberry Pi** en **USB**.
 - Un accès SSH à votre machine.
@@ -135,3 +144,18 @@ Vérifier que le disque dur est bien monté :
 - `df -h`
 
 ![visualisation disque /dev/sda1](df.png)
+
+## Scripts divers
+### gestion des droits du site web
+
+Voici un petit script qui permet d'appliquer les acl **apache** sur tous les dossiers et fichiers du site WEB après une copie d'un fichier du local au distant.\
+Pour ma part, j'utilise un serveur WEB local sur mon macbook pro, je ne travail qu'en local et après mes modifications, j'effectue les copies via **ssh** en utilisant la commande `scp`vers mon serveur WEB distant.
+
+`chright_agc.sh`
+```
+#!/bin/bash
+
+sudo -s chown -R www-data:www-data /var/www/html/agc
+sudo -s chown -R www-data:www-data /var/www/html/images
+```
+
