@@ -46,6 +46,9 @@ Allez dans phpmyadmin via le web est créer les deux bases de données sans cré
 ## Installation serveur postfix :
 - `sudo apt install mailutils`
 
+## Installation outils réseau :
+- `sudo apt-get install net-tools`
+
 ## Installation de letsencrypt pour permettre la création d'un certificat serveur :
 - `sudo apt-get install snapd`  --> gestionnaire de paquet qui doit déjà être installé sur la version Ubuntu 21.10
 - `sudo snap install core`
@@ -75,6 +78,9 @@ Download l'application no-ip duc sur le site de no-ip
 - `sudo make install`
 - `Create the configuration file: /usr/local/bin/noip2 -C`
 
+Si vous redémarrez le **Raspberry pi4** ou si il redémarre suite à une coupure de courant, le DNS dynamique ne sera plus reconnu lors de l'accès à un serveur WEB sur le **Raspberry Pi**.
+Pour récupérer le nom **DNS** de votre site **WEB**, il faut aller sur le site [no-ip](https://www.noip.com/login?utm_campaign=getting-started&utm_medium=notice&utm_source=email) et supprimer le **No-IP Hostnames** et le recréé. Vous obtenez une nouvelle **adresse IP** et votre site **WEB** est à nouveau disponible.
+
 ## Sur le site de no-ip, dans votre espace client, il faut lancer la configuration du host :
 - No-IP Hostnames / cliquez sur Last Update après avoir créer un host.
 - Une fenêtre s'affiche : **No Dynamic Update Detected for: agc.blogsyte.com**, cliquez sur le bouton **Configure Now**
@@ -89,8 +95,9 @@ Download l'application no-ip duc sur le site de no-ip
 - **Port Forwarding**, tester le port `80` ou `443` pour vérifier qu'ils sont bien ouvert sur le **Raspberry Pi**. 
   * Si il affiche un message vert **port 443 is open**, alors le tour est joué, votre site est dorénavant accessible de l'extérieur via une adresse publique de **no-ip**. Plutôt un nom **DNS** car l'adresse IP publique change toutes les 24 heures car c'est du DNS dynamique, **DyDNS**.
 
-  `Àttention :` Si vous redémarrez votre **Raspberry pi**, vous serez amené à lancer la commande suivante pour que votre site web soit de nouveau accessible.
-  - `sudo noip2 -C`
+`Àttention :` Si vous redémarrez votre **Raspberry pi**, vous serez amené à lancer la commande suivante pour que votre site web soit de nouveau accessible.
+- `sudo noip2 -C`
+
 ```
 Auto configuration for Linux client of no-ip.com.
 
@@ -106,7 +113,6 @@ Please enter the script/program name  (appuyez uniquement sur la touche ENTER)
 New configuration file '/usr/local/etc/no-ip2.conf' created.
 
 ```
-
 
 ## Brancher un disque dur externe en USB 3 pour la sauvegarde du site WEB :
 ### Pré-requis :

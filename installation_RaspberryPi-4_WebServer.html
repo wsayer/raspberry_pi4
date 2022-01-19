@@ -10,6 +10,11 @@
 <ul>
 <li><code>sudo apt-get install apache2</code></li>
 </ul>
+<h3 id="redirection-pour-éviter-affichage-darborescence">Redirection pour éviter affichage d’arborescence</h3>
+<p>Créer un fichier <code>index.php</code> à mettre à chaque endroit où une arborescence de fichiers peut s’afficher et insérer le code suivant :</p>
+<pre><code>&lt;?php
+header(&quot;Location: https://agc88.ddns.net/agc/&quot;);
+?&gt;</code></pre>
 <h2 id="rapatriement-des-données-de-lancien-serveur-vers-le-nouveau">rapatriement des données de l’ancien serveur vers le nouveau :</h2>
 <ul>
 <li><code>sudo scp -r /Library/WebServer/Documents/agc wsayer@192.168.1.38:/tmp --&gt; de l'ancien serveur vers le nouveau</code></li>
@@ -43,6 +48,10 @@
 <ul>
 <li><code>sudo apt install mailutils</code></li>
 </ul>
+<h2 id="installation-outils-réseau">Installation outils réseau :</h2>
+<ul>
+<li><code>sudo apt-get install net-tools</code></li>
+</ul>
 <h2 id="installation-de-letsencrypt-pour-permettre-la-création-dun-certificat-serveur">Installation de letsencrypt pour permettre la création d’un certificat serveur :</h2>
 <ul>
 <li><code>sudo apt-get install snapd</code> –&gt; gestionnaire de paquet qui doit déjà être installé sur la version Ubuntu 21.10</li>
@@ -71,6 +80,7 @@
 <li><code>sudo make install</code></li>
 <li><code>Create the configuration file: /usr/local/bin/noip2 -C</code></li>
 </ul>
+<p>Si vous redémarrez le <strong>Raspberry pi4</strong> ou si il redémarre suite à une coupure de courant, le DNS dynamique ne sera plus reconnu lors de l’accès à un serveur WEB sur le <strong>Raspberry Pi</strong>. Pour récupérer le nom <strong>DNS</strong> de votre site <strong>WEB</strong>, il faut aller sur le site <a href="https://www.noip.com/login?utm_campaign=getting-started&amp;utm_medium=notice&amp;utm_source=email">no-ip</a> et supprimer le <strong>No-IP Hostnames</strong> et le recréé. Vous obtenez une nouvelle <strong>adresse IP</strong> et votre site <strong>WEB</strong> est à nouveau disponible.</p>
 <h2 id="sur-le-site-de-no-ip-dans-votre-espace-client-il-faut-lancer-la-configuration-du-host">Sur le site de no-ip, dans votre espace client, il faut lancer la configuration du host :</h2>
 <ul>
 <li>No-IP Hostnames / cliquez sur Last Update après avoir créer un host.</li>
@@ -90,7 +100,21 @@
 <li>Si il affiche un message vert <strong>port 443 is open</strong>, alors le tour est joué, votre site est dorénavant accessible de l’extérieur via une adresse publique de <strong>no-ip</strong>. Plutôt un nom <strong>DNS</strong> car l’adresse IP publique change toutes les 24 heures car c’est du DNS dynamique, <strong>DyDNS</strong>.</li>
 </ul></li>
 </ul>
-<h2 id="brancher-un-disque-dur-externe-en-usb-3">Brancher un disque dur externe en USB 3 :</h2>
+<p><code>Àttention :</code> Si vous redémarrez votre <strong>Raspberry pi</strong>, vous serez amené à lancer la commande suivante pour que votre site web soit de nouveau accessible. - <code>sudo noip2 -C</code></p>
+<pre><code>Auto configuration for Linux client of no-ip.com.
+
+Please enter the login/email string for no-ip.com  william.sayer@wanadoo.fr
+Please enter the password for user &#39;william.sayer@wanadoo.fr&#39;  ************
+
+2 hosts are registered to this account.
+Do you wish to have them all updated?[N] (y/N)  y
+Please enter an update interval:[30]  
+Do you wish to run something at successful update?[N] (y/N)  y
+Please enter the script/program name  (appuyez uniquement sur la touche ENTER)
+
+New configuration file &#39;/usr/local/etc/no-ip2.conf&#39; created.
+</code></pre>
+<h2 id="brancher-un-disque-dur-externe-en-usb-3-pour-la-sauvegarde-du-site-web">Brancher un disque dur externe en USB 3 pour la sauvegarde du site WEB :</h2>
 <h3 id="pré-requis">Pré-requis :</h3>
 <ul>
 <li>Un disque dur formatté en <strong>FAT</strong> ou <strong>NTFS</strong> branché à votre <strong>Raspberry Pi</strong> en <strong>USB</strong>.</li>
@@ -132,3 +156,12 @@
 <figure>
 <img src="df.png" alt="visualisation disque /dev/sda1" /><figcaption aria-hidden="true">visualisation disque /dev/sda1</figcaption>
 </figure>
+<h2 id="scripts-divers">Scripts divers</h2>
+<h3 id="gestion-des-droits-du-site-web">gestion des droits du site web</h3>
+<p>Voici un petit script qui permet d’appliquer les acl <strong>apache</strong> sur tous les dossiers et fichiers du site WEB après une copie d’un fichier du local au distant.<br />
+Pour ma part, j’utilise un serveur WEB local sur mon macbook pro, je ne travail qu’en local et après mes modifications, j’effectue les copies via <strong>ssh</strong> en utilisant la commande <code>scp</code>vers mon serveur WEB distant.</p>
+<p><code>chright_agc.sh</code></p>
+<pre><code>#!/bin/bash
+
+sudo -s chown -R www-data:www-data /var/www/html/agc
+sudo -s chown -R www-data:www-data /var/www/html/images</code></pre>
