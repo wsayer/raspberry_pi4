@@ -6,11 +6,11 @@
 <li><code>sudo apt install -y ca-certificates curl openssh-server</code></li>
 <li><code>sudo hostnamectl</code></li>
 </ul>
-<h2 id="installation-serveur-web">Installation serveur WEB :</h2>
+<h2 id="installation-du-serveur-web">Installation du serveur WEB :</h2>
 <ul>
 <li><code>sudo apt-get install apache2</code></li>
 </ul>
-<h3 id="redirection-pour-éviter-affichage-darborescence">Redirection pour éviter affichage d’arborescence</h3>
+<h3 id="redirection-pour-éviter-laffichage-dune-arborescence">Redirection pour éviter l’affichage d’une arborescence</h3>
 <p>Créer un fichier <code>index.php</code> à mettre à chaque endroit où une arborescence de fichiers peut s’afficher et insérer le code suivant :</p>
 <pre><code>&lt;?php
 header(&quot;Location: https://agc88.ddns.net/agc/&quot;);
@@ -22,10 +22,8 @@ header(&quot;Location: https://agc88.ddns.net/agc/&quot;);
 <li><code>sudo mv /tmp/agc .</code></li>
 <li><code>sudo chown -R www-data:www-data agc/</code></li>
 </ul>
-<h2 id="installation-de-php-la-derenière-version-disponible-pour-la-version-dubuntu-installé">Installation de php la derenière version disponible pour la version d’ubuntu installé :</h2>
-<ul>
-<li><code>sudo apt-get install php</code></li>
-</ul>
+<h2 id="installation-de-php">Installation de php :</h2>
+<p>La dernière version disponible pour la version d’ubuntu installé. - <code>sudo apt-get install php</code></p>
 <h2 id="installation-de-mysql">Installation de Mysql :</h2>
 <ul>
 <li><code>sudo apt-get install mariadb-server</code></li>
@@ -37,17 +35,61 @@ header(&quot;Location: https://agc88.ddns.net/agc/&quot;);
 <li><code>sudo apt-get install phpmyadmin</code></li>
 </ul>
 <p>Allez dans phpmyadmin via le web est créer les deux bases de données sans créer de tables, nécessaire pour la restauration</p>
-<h2 id="rappatriement-bases-de-données">Rappatriement bases de données :</h2>
+<h2 id="rappatriement-des-bases-de-données">Rappatriement des bases de données :</h2>
 <ul>
 <li><code>sudo gzip -d agc.sql.gz</code></li>
 <li><code>sudo gzip -d media.sql.gz</code></li>
 <li><code>sudo mysql -u root -p agc &lt; agc.sql</code></li>
 <li><code>sudo mysql -u root -p media &lt; media.sql</code></li>
 </ul>
-<h2 id="installation-serveur-postfix">Installation serveur postfix :</h2>
+<h2 id="installation-du-serveur-postfix">Installation du serveur postfix :</h2>
 <ul>
-<li><code>sudo apt install mailutils</code></li>
+<li><code>sudo apt install postfix</code></li>
 </ul>
+<h2 id="configuration-de-postfix">Configuration de postfix :</h2>
+<ul>
+<li><code>sudo vi /etc/postfix/main.cf</code></li>
+</ul>
+<pre><code># See /usr/share/postfix/main.cf.dist for a commented, more complete version
+
+
+# Debian specific:  Specifying a file name will cause the first
+# line of that file to be used as the name.  The Debian default
+# is /etc/mailname.
+#myorigin = /etc/mailname
+
+smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
+biff = no
+
+# appending .domain is the MUA&#39;s job.
+append_dot_mydomain = no
+
+# Uncomment the next line to generate &quot;delayed mail&quot; warnings
+#delay_warning_time = 4h
+
+readme_directory = no
+
+# See http://www.postfix.org/COMPATIBILITY_README.html -- default to 2 on
+# fresh installs.
+compatibility_level = 2
+
+smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
+myhostname = agc88.ddns.net
+mydomain = ddns.net
+alias_maps = hash:/etc/aliases
+alias_database = hash:/etc/aliases
+#myorigin = /etc/mailname
+myorigin = /etc/mailname
+mydestination = agc88.ddns.net, localhost
+relayhost = smtp.free.fr
+mailbox_size_limit = 0
+#recipient_delimiter = +
+inet_interfaces = all
+inet_protocols = ipv4
+#mynetworks = 90.6.45.0/24
+mynetworks = 192.168.1.0/24
+mailbox_command = procmail -a &quot;$EXTENSION&quot;
+recipient_delimiter = +</code></pre>
 <h2 id="installation-outils-réseau">Installation outils réseau :</h2>
 <ul>
 <li><code>sudo apt-get install net-tools</code></li>
