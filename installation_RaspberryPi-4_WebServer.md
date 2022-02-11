@@ -5,10 +5,10 @@
 - `sudo apt install -y ca-certificates curl openssh-server`
 - `sudo hostnamectl`
 
-## Installation serveur WEB :
+## Installation du serveur WEB :
 - `sudo apt-get install apache2`
 
-### Redirection pour éviter affichage d'arborescence
+### Redirection pour éviter l'affichage d'une arborescence
 
 Créer un fichier `index.php` à mettre à chaque endroit où une arborescence de fichiers peut s'afficher et insérer le code suivant :
 ```
@@ -23,7 +23,8 @@ header("Location: https://agc88.ddns.net/agc/");
 - `sudo mv /tmp/agc .`
 - `sudo chown -R www-data:www-data agc/`
 
-## Installation de php la derenière version disponible pour la version d'ubuntu installé :
+## Installation de php : 
+La dernière version disponible pour la version d'ubuntu installé.
 - `sudo apt-get install php`
 
 ## Installation de Mysql :
@@ -37,14 +38,60 @@ header("Location: https://agc88.ddns.net/agc/");
 
 Allez dans phpmyadmin via le web est créer les deux bases de données sans créer de tables, nécessaire pour la restauration
 
-## Rappatriement bases de données :
+## Rappatriement des bases de données :
 - `sudo gzip -d agc.sql.gz` 
 - `sudo gzip -d media.sql.gz` 
 - `sudo mysql -u root -p agc < agc.sql`
 - `sudo mysql -u root -p media < media.sql`
 
-## Installation serveur postfix :
-- `sudo apt install mailutils`
+## Installation du serveur postfix :
+- `sudo apt install postfix`
+
+## Configuration de postfix :
+- `sudo vi /etc/postfix/main.cf`
+
+````
+# See /usr/share/postfix/main.cf.dist for a commented, more complete version
+
+
+# Debian specific:  Specifying a file name will cause the first
+# line of that file to be used as the name.  The Debian default
+# is /etc/mailname.
+#myorigin = /etc/mailname
+
+smtpd_banner = $myhostname ESMTP $mail_name (Ubuntu)
+biff = no
+
+# appending .domain is the MUA's job.
+append_dot_mydomain = no
+
+# Uncomment the next line to generate "delayed mail" warnings
+#delay_warning_time = 4h
+
+readme_directory = no
+
+# See http://www.postfix.org/COMPATIBILITY_README.html -- default to 2 on
+# fresh installs.
+compatibility_level = 2
+
+smtpd_relay_restrictions = permit_mynetworks permit_sasl_authenticated defer_unauth_destination
+myhostname = agc88.ddns.net
+mydomain = ddns.net
+alias_maps = hash:/etc/aliases
+alias_database = hash:/etc/aliases
+#myorigin = /etc/mailname
+myorigin = /etc/mailname
+mydestination = agc88.ddns.net, localhost
+relayhost = smtp.free.fr
+mailbox_size_limit = 0
+#recipient_delimiter = +
+inet_interfaces = all
+inet_protocols = ipv4
+#mynetworks = 90.6.45.0/24
+mynetworks = 192.168.1.0/24
+mailbox_command = procmail -a "$EXTENSION"
+recipient_delimiter = +
+````
 
 ## Installation outils réseau :
 - `sudo apt-get install net-tools`
