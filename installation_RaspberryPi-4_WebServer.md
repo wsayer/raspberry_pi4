@@ -44,10 +44,20 @@ Allez dans phpmyadmin via le web est créer les deux bases de données sans cré
 - `sudo mysql -u root -p agc < agc.sql`
 - `sudo mysql -u root -p media < media.sql`
 
-## Installation du serveur postfix :
-- `sudo apt install postfix`
+## Accès à la base de données :
+Une chose importante, ne pas donner d'accès à `phpmyadmin` à l'extérieur de votre réseau local, c'est pourquoi on utilisera une adresse ip privé derrière la FREEBOX. On va exécuter une commande php qui va nous ouvrir le port 8000 sur l'adresse IP privé de notre serveur **raspberry pi**
+- `sudo php -S 192.168.1.201:8000`
+
+Dans un navigateur, saisissez l'url suivante : http://192.168.1.201:8000/phpmyadmin
+
+## Installation du serveur postfix avec extension mysql :
+- `sudo apt install postfix-mysql`
 
 ## Configuration de postfix :
+- `sudo vi /etc/postifx/master.cf`
+
+Vérifier la ligne 11 si il y a bien un tiret au niveau de la variable `chroot`. Si vous avez un caractère `n` ou `y` alors remplacez-le par un tiret (`-`).
+
 - `sudo vi /etc/postfix/main.cf`
 
 ````
@@ -80,7 +90,7 @@ mydomain = ddns.net
 alias_maps = hash:/etc/aliases
 alias_database = hash:/etc/aliases
 #myorigin = /etc/mailname
-myorigin = /etc/mailname
+myorigin = localhost
 mydestination = agc88.ddns.net, localhost
 relayhost = smtp.free.fr
 mailbox_size_limit = 0
