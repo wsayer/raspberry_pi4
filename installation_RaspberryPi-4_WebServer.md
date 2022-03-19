@@ -8,6 +8,35 @@
 ## Installation du serveur WEB :
 - `sudo apt-get install apache2`
 
+### fichier de configuration d'apache SSL :
+`cd /etc/apache2/sites-available/agc88-le-ssl.conf`
+
+```
+<VirtualHost _default_:37443>
+        ServerName agc88.ddns.net 
+        SSLEngine on
+        DocumentRoot /var/www/html/
+        ErrorLog ${APACHE_LOG_DIR}/test-mod-error.log
+        CustomLog ${APACHE_LOG_DIR}/test-mod-access.log combined
+        SSLOpenSSLConfCmd MinProtocol TLSv1.2
+        Protocols h2 http/1.1 acme-tls/1
+        <Directory />
+        #       Options FollowSymLinks  
+                Options None
+                AllowOverride All
+
+        </Directory>
+        <Directory /var/www/multisite.test>
+                Options FollowSymLinks MultiViews
+                AllowOverride All
+                Order allow,deny  
+                allow from all  
+        </Directory>
+        SSLCertificateFile /var/lib/fwupd/pki/client.pem
+        SSLCertificateKeyFile /var/lib/fwupd/pki/secret.key
+</VirtualHost>
+```
+
 ### Redirection pour éviter l'affichage d'une arborescence
 
 Créer un fichier `index.php` à mettre à chaque endroit où une arborescence de fichiers peut s'afficher et insérer le code suivant :
