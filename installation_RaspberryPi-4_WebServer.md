@@ -9,11 +9,11 @@
 - `sudo apt-get install apache2`
 
 ### fichier de configuration d'apache SSL :
-`cd /etc/apache2/sites-available/agc88-le-ssl.conf`
+`cd /etc/apache2/sites-available/agc-le-ssl.conf`
 
 ```
-<VirtualHost _default_:37443>
-        ServerName agc88.ddns.net 
+<VirtualHost _default_:443>
+        ServerName agc.ddns.net 
         SSLEngine on
         DocumentRoot /var/www/html/
         ErrorLog ${APACHE_LOG_DIR}/test-mod-error.log
@@ -42,7 +42,7 @@
 Créer un fichier `index.php` à mettre à chaque endroit où une arborescence de fichiers peut s'afficher et insérer le code suivant :
 ```
 <?php
-header("Location: https://agc88.ddns.net/agc/");
+header("Location: https://agc.ddns.net/agc/");
 ?>
 ```
 
@@ -63,6 +63,8 @@ La dernière version disponible pour la version d'ubuntu installé.
 - `sudo systemctl restart apache2.service`
 - `sudo mysql_secure_installation`
 - `sudo mysql -u root -p`
+
+## Installation de phpMyAdmin :
 - `sudo apt-get install phpmyadmin`
 
 Allez dans phpmyadmin via le web est créer les deux bases de données sans créer de tables, nécessaire pour la restauration
@@ -73,9 +75,27 @@ Allez dans phpmyadmin via le web est créer les deux bases de données sans cré
 - `sudo mysql -u root -p agc < agc.sql`
 - `sudo mysql -u root -p media < media.sql`
 
-## Accès à la base de données :
-Une chose importante, ne pas donner d'accès à `phpmyadmin` à l'extérieur de votre réseau local, c'est pourquoi on utilisera une adresse ip privé derrière la FREEBOX. On va exécuter une commande php qui va nous ouvrir le port 8000 sur l'adresse IP privé de notre serveur **raspberry pi**
-- `sudo php -S 192.168.1.201:8000`
+## Cas d'erreur et procédure pour corriger
+Si vous avez fait des modifications comme par exemple un changement de serveur MYSQL (mariadb).
+`could not find driver`
+Ce message indique que vous n'avez pas le driver **PDO** de **MYSQL**, il faut l'installer :
+`sudo apt-get install pdo-php-mysql`
+
+SQLSTATE[HY000] [2002] No such file or directory
+Ce message vous indique qu'il y a un problème de permissions au niveau de vos répertoire du site web.
+Il faut donc modifier les droits **ACL** au niveau du système de fichier du répertoire racine de votre site web.
+```
+# cd /var/www/html
+# sudo chown -R www-data:www-data agc
+```
+
+`SQLSTATE[HY000] [1130] Host 'agc.atilf.fr' is not allowed to connect to this MariaDB server` 
+- Procédure pour corriger cette erreur, il faut être root, se connecter à la base de données du serveur mysql utilisé par les requêtes **PHP** de votre serveur **apache**.
+```
+# mysql -u root -p
+mysql> GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'tonmotdepasseroot' WITH GRANT OPTION;
+mysql> FLUSH PRIVILEGES;
+```
 
 Dans un navigateur, saisissez l'url suivante : http://192.168.1.201:8000/phpmyadmin
 
