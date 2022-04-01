@@ -100,8 +100,6 @@ mysql> GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'tonmotdepasseroo
 mysql> FLUSH PRIVILEGES;
 ```
 
-Dans un navigateur, saisissez l'url suivante : http://192.168.1.201:8000/phpmyadmin
-
 ## Installation du serveur postfix avec extension mysql :
 - `sudo apt install postfix-mysql`
 
