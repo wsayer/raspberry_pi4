@@ -75,10 +75,13 @@ Allez dans phpmyadmin via le web est créer les deux bases de données sans cré
 - `sudo mysql -u root -p agc < agc.sql`
 - `sudo mysql -u root -p media < media.sql`
 
-## Cas d'erreur et procédure pour corriger
+## Cas d'erreurs et procédures pour les corriger
 Si vous avez fait des modifications comme par exemple un changement de serveur MYSQL (mariadb).
+
 `could not find driver`
+
 Ce message indique que vous n'avez pas le driver **PDO** de **MYSQL**, il faut l'installer :
+
 `sudo apt-get install pdo-php-mysql`
 
 SQLSTATE[HY000] [2002] No such file or directory
