@@ -117,7 +117,7 @@ then
         mail -s "redemarrage service apache le $(date)" william.sayer@atilf.fr < /root/message
 fi
 ```
--`vi message`
+- `vi message`
 ```
 Le service httpd a été arrêté pour une raison inconnue.
 Le service apache a été redémarré automatiquement. 
