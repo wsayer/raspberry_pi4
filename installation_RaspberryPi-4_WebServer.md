@@ -42,7 +42,7 @@
 Créer un fichier `index.php` à mettre à chaque endroit où une arborescence de fichiers peut s'afficher et insérer le code suivant :
 ```
 <?php
-header("Location: https://agc.ddns.net/agc/");
+header("Location: https://agc.atilf.fr/agc/");
 ?>
 ```
 
@@ -98,6 +98,31 @@ Il faut donc modifier les droits **ACL** au niveau du système de fichier du ré
 # mysql -u root -p
 mysql> GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'tonmotdepasseroot' WITH GRANT OPTION;
 mysql> FLUSH PRIVILEGES;
+```
+
+## Résolution de l'arrêt intempestif du service apache :
+Lors de l'arrêt du service apache, le `ps` test en temps réel si le service apache est up, donc si la commande `echo $?` est égale à `0`. si cette commande est égale à `1` alors le service apache est redémarré dans les 10 secondes après l'arrêt du service.
+
+- `sudo -s`
+- `cd /root`
+- `vi apache_monitor.sh`
+```
+#!/bin/sh
+
+ps auxw | grep apache2 | grep -v grep > /dev/null
+
+if [ $? != 0 ]
+then
+        /etc/init.d/apache2 start > /dev/null
+        mail -s "redemarrage service apache le $(date)" william.sayer@atilf.fr < /root/message
+fi
+```
+-`vi message`
+```
+Le service httpd a été arrêté pour une raison inconnue.
+Le service apache a été redémarré automatiquement. 
+--
+Le Webmaster
 ```
 
 ## Installation du serveur postfix avec extension mysql :
