@@ -76,6 +76,8 @@ Si ce n'est pas encore activer votre virtual-host :
 - sudo a2ensite agc-le-ssl.conf
 - sudo systemctl restart apache2.service
 
+Un répertoire **md** est créé dans le répertoire **/etc/apache2**
+
 ### Redirection pour éviter l'affichage d'une arborescence
 
 Créer un fichier `index.php` à mettre à chaque endroit où une arborescence de fichiers peut s'afficher et insérer le code suivant :
