@@ -37,6 +37,45 @@
 </VirtualHost>
 ```
 
+### Installation du module mod_md pour apache
+mod_md est une solution pour l’obtention de certificat serveur **Let's Encrypt**.
+
+- sudo a2enmod md
+Modifié votre fichier `/etc/apache2/sites-available/agc-le-ssl.conf` et ajouter des directive **mod_md**
+```
+MDCertificateAgreement accepted
+LogLevel md:info
+MDContactEmail william.sayer@atilf.fr
+MDomain agc.atilf.fr
+<VirtualHost _default_:443>
+        ServerName agc.atilf.fr
+        SSLEngine on
+        DocumentRoot /var/www/html/
+        ErrorLog ${APACHE_LOG_DIR}/test-mod-error.log
+        CustomLog ${APACHE_LOG_DIR}/test-mod-access.log combined
+        SSLOpenSSLConfCmd MinProtocol TLSv1.2
+        Protocols h2 http/1.1 acme-tls/1
+        <Directory />
+        #       Options FollowSymLinks  
+                Options None
+                AllowOverride All
+
+        </Directory>
+        <Directory /var/www/multisite.test>
+                Options FollowSymLinks MultiViews
+                AllowOverride All
+                Order allow,deny  
+                allow from all  
+        </Directory>
+        #SSLCertificateFile /var/lib/fwupd/pki/client.pem
+        #SSLCertificateKeyFile /var/lib/fwupd/pki/secret.key
+</VirtualHost>
+```
+
+Si ce n'est pas encore activer votre virtual-host :
+- sudo a2ensite agc-le-ssl.conf
+- sudo systemctl restart apache2.service
+
 ### Redirection pour éviter l'affichage d'une arborescence
 
 Créer un fichier `index.php` à mettre à chaque endroit où une arborescence de fichiers peut s'afficher et insérer le code suivant :
