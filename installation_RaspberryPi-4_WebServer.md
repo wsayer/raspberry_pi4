@@ -240,7 +240,7 @@ recipient_delimiter = +
 
 - `sudo apt-get install net-tools`
 
-## Installation de letsencrypt pour permettre la création d'un certificat serveur ( :
+## Installation de letsencrypt pour permettre la création d'un certificat serveur (sans utiliser mod_md) :
 
 - `sudo apt-get install snapd`  --> gestionnaire de paquet qui doit déjà être installé sur la version Ubuntu 21.10
 - `sudo snap install core`
@@ -256,10 +256,12 @@ recipient_delimiter = +
 - `systemctl restart apache2 ou systemctl reload apache2`
 `
 ## Installation de gcc et make pour permettre la compilation d'application comme no-ip :
+
 - `sudo apt-get install gcc`
 - `sudo apt-get install make`
 
 ## no-ip :
+
 Download l'application no-ip duc sur le site de no-ip
 
 - `sudo mv noip-duc-linux.tar.gz /usr/local/src/`
@@ -274,6 +276,7 @@ Si vous redémarrez le **Raspberry pi4** ou si il redémarre suite à une coupur
 Pour récupérer le nom **DNS** de votre site **WEB**, il faut aller sur le site [no-ip](https://www.noip.com/login?utm_campaign=getting-started&utm_medium=notice&utm_source=email) et supprimer le **No-IP Hostnames** et le recréé. Vous obtenez une nouvelle **adresse IP** et votre site **WEB** est à nouveau disponible.
 
 ## Sur le site de no-ip, dans votre espace client, il faut lancer la configuration du host :
+
 - No-IP Hostnames / cliquez sur Last Update après avoir créer un host.
 - Une fenêtre s'affiche : **No Dynamic Update Detected for: agc.blogsyte.com**, cliquez sur le bouton **Configure Now**
 - Select Hostname, cliquez sur le bouton **Next Step**
@@ -312,12 +315,14 @@ New configuration file '/usr/local/etc/no-ip2.conf' created.
 - Un accès SSH à votre machine.
 
 ### Installation :
+
 - `sudo apt-get update`
 - `sudo apt-get upgrade`
 - `sudo apt-get install ntfs-3g`
 
 ### Configuration :
 #### Identification du disque dur :
+
 - `sudo fdisk -l`
 
 ![commande fdisk](fdisk-1.png)
@@ -328,6 +333,7 @@ New configuration file '/usr/local/etc/no-ip2.conf' created.
 `/dev/sda1: LABEL="backup" BLOCK_SIZE="512" UUID="06A23944A239398F" TYPE="ntfs" PARTUUID="5afddfb0-01"`
 
 #### Création du dossier cible :
+
 - `sudo sudo mkdir /media/usb`
 - `sudo chown -R wsayer:wsayer usb` --> droit de l'utilisateur du Raspberry Pi
 - `sudo vi /etc/fstab`
@@ -344,7 +350,7 @@ Vérifier que le disque dur est bien monté :
 ![visualisation disque /dev/sda1](df.png)
 
 ## Scripts divers
-### gestion des droits du site web
+### gestion des droits du site web :
 
 Voici un petit script qui permet d'appliquer les acl **apache** sur tous les dossiers et fichiers du site WEB après une copie d'un fichier du local au distant.\
 Pour ma part, j'utilise un serveur WEB local sur mon macbook pro, je ne travail qu'en local et après mes modifications, j'effectue les copies via **ssh** en utilisant la commande `scp`vers mon serveur WEB distant.
