@@ -1,14 +1,17 @@
 # Installation Raspberry Pi 4 WebServer
 ## Installation de la couche SSL :
+
 - `sudo apt-get update`
 - `sudo apt-get upgrade -y`
 - `sudo apt install -y ca-certificates curl openssh-server`
 - `sudo hostnamectl`
 
 ## Installation du serveur WEB :
+
 - `sudo apt-get install apache2`
 
 ### fichier de configuration d'apache SSL :
+
 `cd /etc/apache2/sites-available/agc-le-ssl.conf`
 
 ```
@@ -37,7 +40,8 @@
 </VirtualHost>
 ```
 
-### Installation du module mod_md pour apache
+### Installation du module mod_md pour apache :
+
 mod_md est une solution pour l’obtention de certificat serveur **Let's Encrypt**.
 
 - sudo a2enmod md
@@ -80,7 +84,7 @@ Si ce n'est pas encore activer votre virtual-host :
 
 Un répertoire **md** est créé dans le répertoire **/etc/apache2**
 
-### Redirection pour éviter l'affichage d'une arborescence
+### Redirection pour éviter l'affichage d'une arborescence :
 
 Créer un fichier `index.php` à mettre à chaque endroit où une arborescence de fichiers peut s'afficher et insérer le code suivant :
 ```
@@ -90,16 +94,19 @@ header("Location: https://agc.atilf.fr/agc/");
 ```
 
 ## rapatriement des données de l'ancien serveur vers le nouveau :
+
 - `sudo scp -r /Library/WebServer/Documents/agc wsayer@192.168.1.38:/tmp --> de l'ancien serveur vers le nouveau`
 - `cd /var/www/html` --> sur le serveur cible (le nouveau)
 - `sudo mv /tmp/agc .`
 - `sudo chown -R www-data:www-data agc/`
 
 ## Installation de php : 
+
 La dernière version disponible pour la version d'ubuntu installé.
 - `sudo apt-get install php`
 
 ## Installation de Mysql :
+
 - `sudo apt-get install mariadb-server`
 - `sudo apt-get install php-pdo`
 - `sudo apt-get install php-pdo-mysql`
@@ -136,7 +143,9 @@ Il faut donc modifier les droits **ACL** au niveau du système de fichier du ré
 ```
 
 `SQLSTATE[HY000] [1130] Host 'agc.atilf.fr' is not allowed to connect to this MariaDB server` 
+
 - Procédure pour corriger cette erreur, il faut être root, se connecter à la base de données du serveur mysql utilisé par les requêtes **PHP** de votre serveur **apache**.
+
 ```
 # mysql -u root -p
 mysql> GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'tonmotdepasseroot' WITH GRANT OPTION;
@@ -144,11 +153,13 @@ mysql> FLUSH PRIVILEGES;
 ```
 
 ## Résolution de l'arrêt intempestif du service apache :
+
 Lors de l'arrêt du service apache, le `ps` test en temps réel si le service apache est up, donc si la commande `echo $?` est égale à `0`. si cette commande est égale à `1` alors le service apache est redémarré dans les 10 secondes après l'arrêt du service.
 
 - `sudo -s`
 - `cd /root`
 - `vi apache_monitor.sh`
+
 ```
 #!/bin/sh
 
@@ -160,7 +171,9 @@ then
         mail -s "redemarrage service apache le $(date)" william.sayer@atilf.fr < /root/message
 fi
 ```
+
 - `vi message`
+
 ```
 Le service httpd a été arrêté pour une raison inconnue.
 Le service apache a été redémarré automatiquement. 
@@ -169,9 +182,11 @@ Le Webmaster
 ```
 
 ## Installation du serveur postfix avec extension mysql :
+
 - `sudo apt install postfix-mysql`
 
 ## Configuration de postfix :
+
 - `sudo vi /etc/postifx/master.cf`
 
 Vérifier la ligne 11 si il y a bien un tiret au niveau de la variable `chroot`. Si vous avez un caractère `n` ou `y` alors remplacez-le par un tiret (`-`).
@@ -222,9 +237,11 @@ recipient_delimiter = +
 ````
 
 ## Installation outils réseau :
+
 - `sudo apt-get install net-tools`
 
-## Installation de letsencrypt pour permettre la création d'un certificat serveur :
+## Installation de letsencrypt pour permettre la création d'un certificat serveur ( :
+
 - `sudo apt-get install snapd`  --> gestionnaire de paquet qui doit déjà être installé sur la version Ubuntu 21.10
 - `sudo snap install core`
 - `sudo snap refresh core`
