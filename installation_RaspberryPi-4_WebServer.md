@@ -41,7 +41,9 @@
 mod_md est une solution pour l’obtention de certificat serveur **Let's Encrypt**.
 
 - sudo a2enmod md
-Modifié votre fichier `/etc/apache2/sites-available/agc-le-ssl.conf` et ajouter des directive **mod_md**
+
+Modifiez votre fichier `/etc/apache2/sites-available/agc-le-ssl.conf` et ajouter des directives **mod_md**
+
 ```
 MDCertificateAgreement accepted
 LogLevel md:info
